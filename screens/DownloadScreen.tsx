@@ -23,6 +23,7 @@ import DownloadListItem from '../features/downloads/components/DownloadListItem'
 import { DownloadAction } from '../features/downloads/constants/DownloadAction';
 import { DownloadStatus } from '../features/downloads/constants/DownloadStatus';
 import { getDownloadItemActions } from '../features/downloads/utils/downloadItemActions';
+import { packageUri } from '../features/downloads/utils/offlineGame';
 import { useStores } from '../hooks/useStores';
 import type DownloadModel from '../models/DownloadModel';
 import { getFilesUri } from '../utils/File';
@@ -49,11 +50,11 @@ const DownloadScreen = () => {
 		// TODO: Add user messaging on errors
 		try {
 			// Delete the download file
-			await FileSystem.deleteAsync(download.uri, { idempotent: true });
+			await FileSystem.deleteAsync(download.game ? packageUri(download.game) : download.uri, { idempotent: true });
 
 			// Get the path for each subdirectory the item exists in descending order
 			// i.e. [ 'Downloads/Series Name/Season 1/', 'Downloads/Series Name/', 'Downloads/' ]
-			const pathParts = download.relativePath.split('/').filter(p => p);
+			const pathParts = download.game ? [] : download.relativePath.split('/').filter(p => p);
 			const checkPaths: string[] = [];
 			for (let i = pathParts.length; i > 0; i--) {
 				checkPaths.push(pathParts.slice(0, i).join('/') + '/');
@@ -137,6 +138,10 @@ const DownloadScreen = () => {
 			case DownloadAction.PlayInApp:
 				item.isNew = false;
 				downloadStore.update(item);
+				if (item.game) {
+					navigation.navigate(Screens.OfflineGameScreen, { downloadKey: item.key });
+					return;
+				}
 				mediaStore.set({
 					isLocalFile: true,
 					type: MediaType.Video,

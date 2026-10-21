@@ -44,6 +44,7 @@ interface SerializedDownload {
 	isComplete?: boolean;
 	isNew: boolean;
 	canPlay?: boolean;
+	game?: DownloadModel['game'];
 	status?: DownloadStatus;
 }
 
@@ -97,6 +98,7 @@ export const deserialize = (valueString: string | null): StorageValue<State> => 
 			// Any pre-existing download without canPlay defined should be playable
 			model.canPlay = typeof obj.canPlay === 'boolean' ? obj.canPlay : true;
 			model.extension = obj.extension;
+			model.game = obj.game;
 			model.isNew = obj.isNew;
 
 			downloads.set(key, model);

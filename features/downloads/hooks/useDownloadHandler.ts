@@ -8,6 +8,7 @@
 
 import type { Api } from '@jellyfin/sdk/lib/api';
 import { MediaType } from '@jellyfin/sdk/lib/generated-client/models/media-type';
+import { getLibraryApi } from '@jellyfin/sdk/lib/utils/api/library-api';
 import { getMediaInfoApi } from '@jellyfin/sdk/lib/utils/api/media-info-api';
 import { getSessionApi } from '@jellyfin/sdk/lib/utils/api/session-api';
 import * as FileSystem from 'expo-file-system';
@@ -21,6 +22,7 @@ import { getDeviceProfile } from '../../../utils/Device';
 import { ensurePathExists } from '../../../utils/File';
 import { DownloadStatus } from '../constants/DownloadStatus';
 import { getContainerExtension } from '../utils/file';
+import { prepareGameDownload } from '../utils/offlineGame';
 import { toDownloadProfile } from '../utils/profile';
 
 interface DownloadMetadata {
@@ -120,6 +122,17 @@ export const useDownloadHandler = (enabled = false) => {
 			// Get an API instance
 			const serverUrl = download.serverUrl.endsWith('/') ? download.serverUrl.slice(0, -1) : download.serverUrl;
 			const api = rootStore.getSdk().createApi(serverUrl, download.apiKey);
+
+			let isGame = download.item.Tags?.includes('JellyEmu');
+			if (!download.item.Tags && download.item.Type === 'Book') {
+				const { data: item } = await getLibraryApi(api).getItem({ itemId: download.item.Id });
+				isGame = item.Tags?.includes('JellyEmu');
+			}
+			if (isGame) {
+				await prepareGameDownload(api, download);
+				download.status = DownloadStatus.Complete;
+				return;
+			}
 
 			let downloadMetadata: DownloadMetadata | undefined;
 			if (

@@ -18,6 +18,7 @@ export const Screens = {
 	ErrorScreen: 'ErrorScreen',
 	// Downloads screens
 	DownloadsTab: 'Downloads',
+	OfflineGameScreen: 'OfflineGame',
 	// Settings screens
 	SettingsTab: 'Settings',
 	SettingsScreen: 'SettingsScreen',
