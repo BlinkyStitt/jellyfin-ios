@@ -24,7 +24,7 @@ import { useStores } from '../hooks/useStores';
 import { getIconName } from '../utils/Icons';
 
 const HomeScreen = () => {
-	const { rootStore, serverStore, mediaStore, settingStore } = useStores();
+	const { rootStore, serverStore, mediaStore, settingStore, downloadStore } = useStores();
 	const navigation = useNavigation();
 	const { t } = useTranslation();
 	const insets = useSafeAreaInsets();
@@ -184,11 +184,11 @@ const HomeScreen = () => {
 									t('home.errorUrl', { url: server.urlString })
 								]}
 								buttonIcon={{
-									name: getIconName('refresh'),
+									name: getIconName(downloadStore.downloads.size ? 'download' : 'refresh'),
 									type: 'ionicon'
 								}}
-								buttonTitle={t('home.retry')}
-								onPress={() => webview.current?.reload()}
+								buttonTitle={t(downloadStore.downloads.size ? 'downloads.openDownloads' : 'home.retry')}
+								onPress={() => downloadStore.downloads.size ? navigation.navigate(Screens.DownloadsTab) : webview.current?.reload()}
 							/>
 						)}
 						// Loading screen is displayed when refreshing

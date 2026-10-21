@@ -31,6 +31,17 @@
     }
   },
   "downloads": {
+    "openDownloads": "Open Downloads",
+    "game": {
+      "save": "Save on Device",
+      "load": "Load from Device",
+      "close": "Close Game",
+      "saved": "Saved on this device.",
+      "loaded": "Loaded from this device.",
+      "noState": "No device state is available for this game.",
+      "stateFailed": "Could not save or load the game state.",
+      "launchFailed": "Could not open the downloaded game."
+    },
     "noDownloads": {
         "heading": "No downloads",
         "description": "Content you download will appear here."
