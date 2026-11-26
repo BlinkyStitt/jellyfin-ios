@@ -33,3 +33,8 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@497990dfed22177a82ba1bbab381bc8f6d27058f # v3.31.6
+
+# Superseded PR validation must not hold runner capacity.
+concurrency:
+  group: pr-ci-codeql-analysis.yml-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
