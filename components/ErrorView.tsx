@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import React, { type FC, useContext } from 'react';
+import React, { type FC, type ReactNode, useContext } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Button, Icon, Text, ThemeContext } from 'react-native-elements';
 
@@ -19,6 +19,7 @@ interface IconProps {
 }
 
 interface ErrorViewProps {
+	children?: ReactNode;
 	icon?: IconProps;
 	heading: string;
 	message: string;
@@ -29,6 +30,7 @@ interface ErrorViewProps {
 }
 
 const ErrorView: FC<ErrorViewProps> = ({
+	children,
 	icon = { name: getIconName('alert'), type: 'ionicon' },
 	heading,
 	message,
@@ -87,6 +89,7 @@ const ErrorView: FC<ErrorViewProps> = ({
 					onPress={onPress}
 				/>
 			)}
+			{children}
 		</View>
 	);
 };

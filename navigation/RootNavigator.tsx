@@ -11,12 +11,14 @@ import React from 'react';
 import { enableScreens } from 'react-native-screens';
 
 import { Screens } from '../constants/Screens';
+import OfflineGameScreen from '../screens/OfflineGameScreen';
 import ServerHelpScreen from '../screens/ServerHelpScreen';
 
 import AppNavigator from './AppNavigator';
 
 export type RootNavigatorParams = {
 	[Screens.App]: undefined;
+	[Screens.OfflineGameScreen]: { downloadKey: string };
 	[Screens.ServerHelpScreen]: undefined;
 };
 
@@ -34,6 +36,7 @@ const RootNavigator = () => {
 				name={Screens.App}
 				component={AppNavigator}
 			/>
+			<RootStack.Screen name={Screens.OfflineGameScreen} component={OfflineGameScreen} />
 			<RootStack.Screen
 				name={Screens.ServerHelpScreen}
 				component={ServerHelpScreen}

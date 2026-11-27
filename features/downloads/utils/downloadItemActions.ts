@@ -15,11 +15,10 @@ import type { DownloadItemAction } from '../types/downloadItemAction';
 
 export const getDownloadItemActions = (download: DownloadModel): DownloadItemAction[] => {
 	const isComplete = download.status === DownloadStatus.Complete;
-	// NOTE: Currently only video has a native UI to play within the app.
-	// The media type check should be removed when we have a native audio player UI available.
+	// Video and complete game packages have an in-app player.
 	const isPlayableInApp = download.canPlay && (
 		!download.item.MediaType || // Legacy downloads won't have a MediaType set but are playable
-		download.item.MediaType === MediaType.Video
+		download.item.MediaType === MediaType.Video || !!download.game
 	);
 
 	return [
@@ -37,14 +36,14 @@ export const getDownloadItemActions = (download: DownloadModel): DownloadItemAct
 			image: 'folder',
 			isDefault: true,
 			isEnabled: true,
-			isSupported: isComplete
+			isSupported: isComplete && !download.game
 		},
 		{
 			id: DownloadAction.Share,
 			title: 'common.share',
 			image: 'square.and.arrow.up',
 			isEnabled: true,
-			isSupported: isComplete
+			isSupported: isComplete && !download.game
 		},
 		{
 			id: DownloadAction.Delete,

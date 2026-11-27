@@ -24,6 +24,25 @@
 
 Jellyfin for iOS is a mobile app built with [Expo](https://expo.io/) primarily targeting iOS devices. We welcome all contributions and pull requests! If you have a larger feature in mind please open an issue so we can discuss the implementation before you start. We use [GitHub Projects](https://github.com/jellyfin/jellyfin-ios/projects) as a general roadmap for releases.
 
+## Offline games in this fork
+
+This experimental fork adds offline JellyEmu games to the existing **Downloads** tab.
+It requires the JellyEmu package-manifest endpoint at
+`/jellyemu/offline/{itemId}/manifest` on the server. Download a game through its normal
+Jellyfin **Download** action while connected. Keep the app open until it completes.
+Remove and download again any ROM-only entries made by an unmodified client. Tap the new
+entry in **Downloads** to play inside Jellyfin Mobile. The app stores the ROM and
+emulator runtime together; opening an archive in Files is not required.
+
+Use **Save on Device** and **Load from Device** in the player. States stay on the device,
+separate from cloud saves, with one state per server, account, game and core. Removing
+a game download keeps its device state. When the server is unavailable, **Open Downloads**
+on the Home error page opens the local library. Genesis and Sonic 2 are the initial
+test target; physical controller testing remains separate.
+
+This feature uses AI-assisted development. It is an experimental fork, not an official
+Jellyfin release.
+
 ## Translations
 
 Translations can be improved very easily from our [Weblate](https://translate.jellyfin.org/projects/jellyfin/jellyfin-expo/) instance. Look through the following graphic to see if your native language could use some work!

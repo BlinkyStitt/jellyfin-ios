@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { DownloadStatus } from '../features/downloads/constants/DownloadStatus';
 import { getExtension } from '../features/downloads/utils/file';
+import { packageUri, type OfflineGame } from '../features/downloads/utils/offlineGame';
 import { getItemDirectory, getItemFileName } from '../utils/baseItem';
 
 export interface DownloadItem extends BaseItemDto {
@@ -45,6 +46,7 @@ export default class DownloadModel {
 	status: DownloadStatus = DownloadStatus.Pending
 	isNew = true
 	canPlay = false
+	game?: OfflineGame
 
 	apiKey: string
 	readonly item: Readonly<DownloadItem>
@@ -152,6 +154,7 @@ export default class DownloadModel {
 
 	/** Returns the URI encoded absolute file path. */
 	get uri() {
+		if (this.game) return packageUri(this.game) + 'index.html';
 		return encodeURI(this.localPath + this.localFilename);
 	}
 }

@@ -6,6 +6,7 @@
 
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
+import { Button } from 'react-native-elements';
 
 import ErrorView from '../ErrorView';
 
@@ -42,6 +43,21 @@ describe('ErrorView', () => {
 		expect(onPress).not.toHaveBeenCalled();
 		fireEvent.press(button);
 		expect(onPress).toHaveBeenCalled();
+	});
+
+	it('keeps retry available beside an offline library action', () => {
+		const retry = jest.fn();
+		const openDownloads = jest.fn();
+		const { getByTestId, getByText } = render(
+			<ErrorView heading='Server offline' message='No connection' buttonTitle='Retry' onPress={retry}>
+				<Button title='Open Downloads' onPress={openDownloads} />
+			</ErrorView>
+		);
+		fireEvent.press(getByText('Open Downloads'));
+		expect(openDownloads).toHaveBeenCalledTimes(1);
+		expect(retry).not.toHaveBeenCalled();
+		fireEvent.press(getByTestId('error-view-button'));
+		expect(retry).toHaveBeenCalledTimes(1);
 	});
 
 	it('should render details', () => {

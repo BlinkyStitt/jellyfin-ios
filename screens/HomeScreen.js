@@ -11,7 +11,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackHandler, Platform, StyleSheet, View } from 'react-native';
-import { ThemeContext } from 'react-native-elements';
+import { Button, ThemeContext } from 'react-native-elements';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AudioPlayer from '../components/AudioPlayer';
@@ -24,7 +24,7 @@ import { useStores } from '../hooks/useStores';
 import { getIconName } from '../utils/Icons';
 
 const HomeScreen = () => {
-	const { rootStore, serverStore, mediaStore, settingStore } = useStores();
+	const { rootStore, serverStore, mediaStore, settingStore, downloadStore } = useStores();
 	const navigation = useNavigation();
 	const { t } = useTranslation();
 	const insets = useSafeAreaInsets();
@@ -189,7 +189,15 @@ const HomeScreen = () => {
 								}}
 								buttonTitle={t('home.retry')}
 								onPress={() => webview.current?.reload()}
-							/>
+							>
+								{!!downloadStore.downloads.size && (
+									<Button
+										title={t('downloads.openDownloads')}
+										containerStyle={{ marginBottom: 17 }}
+										onPress={() => navigation.navigate(Screens.DownloadsTab)}
+									/>
+								)}
+							</ErrorView>
 						)}
 						// Loading screen is displayed when refreshing
 						renderLoading={() => <View style={styles.container} />}
